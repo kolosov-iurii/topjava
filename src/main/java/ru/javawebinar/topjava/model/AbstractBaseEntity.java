@@ -9,6 +9,7 @@ import static org.hibernate.proxy.HibernateProxyHelper.getClassWithoutInitializi
 @MappedSuperclass
 // http://stackoverflow.com/questions/594597/hibernate-annotations-which-is-better-field-or-property-access
 @Access(AccessType.FIELD)
+//@JsonAutoDetect(fieldVisibility = ANY, getterVisibility = NONE, isGetterVisibility = NONE, setterVisibility = NONE)
 public abstract class AbstractBaseEntity implements HasId {
     public static final int START_SEQ = 100000;
 
@@ -37,18 +38,6 @@ public abstract class AbstractBaseEntity implements HasId {
         return id;
     }
 
-    // doesn't work for hibernate lazy proxy
-    public int id() {
-        Assert.notNull(id, "Entity must have id");
-        return id;
-    }
-
-    @Override
-    public boolean isNew() {
-        return getId() == null;
-    }
-
-    //  https://stackoverflow.com/a/78077907/548473
     @Override
     public String toString() {
         return getClass().getSimpleName() + ":" + getId();
