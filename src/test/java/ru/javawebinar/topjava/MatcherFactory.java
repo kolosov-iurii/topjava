@@ -15,14 +15,16 @@ public class MatcherFactory {
     }
 
     public static class Matcher<T> {
-        private final String[] fieldsToIgnore;
+        private final BiConsumer<T, T> assertion;
+        private final BiConsumer<Iterable<T>, Iterable<T>> iterableAssertion;
 
         private Matcher(String... fieldsToIgnore) {
-            this.fieldsToIgnore = fieldsToIgnore;
+            this.assertion = assertion;
+            this.iterableAssertion = iterableAssertion;
         }
 
         public void assertMatch(T actual, T expected) {
-            assertThat(actual).usingRecursiveComparison().ignoringFields(fieldsToIgnore).isEqualTo(expected);
+            assertion.accept(actual, expected);
         }
 
         @SafeVarargs
