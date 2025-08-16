@@ -1,5 +1,7 @@
 package ru.javawebinar.topjava.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.*;
 import org.hibernate.validator.constraints.Range;
@@ -73,6 +75,7 @@ public class User extends AbstractNamedEntity {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")//, cascade = CascadeType.REMOVE, orphanRemoval = true)
     @OrderBy("dateTime DESC")
     @OnDelete(action = OnDeleteAction.CASCADE) //https://stackoverflow.com/a/44988100/548473
+    @JsonManagedReference
     private List<Meal> meals;
 
     public User() {
@@ -82,8 +85,8 @@ public class User extends AbstractNamedEntity {
         this(u.id, u.name, u.email, u.password, u.caloriesPerDay, u.enabled, u.registered, u.roles);
     }
 
-    public User(Integer id, String name, String email, String password, Role... roles) {
-        this(id, name, email, password, DEFAULT_CALORIES_PER_DAY, true, new Date(), Arrays.asList(roles));
+    public User(Integer id, String name, String email, String password, int caloriesPerDay, Role... roles) {
+        this(id, name, email, password, caloriesPerDay, true, new Date(), List.of(roles));
     }
 
     public User(Integer id, String name, String email, String password, int caloriesPerDay, boolean enabled, Date registered, Collection<Role> roles) {
